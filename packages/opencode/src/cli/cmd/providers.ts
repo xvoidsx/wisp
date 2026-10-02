@@ -471,8 +471,8 @@ export const ProvidersLoginCommand = effectCmd({
       yield* Prompt.log.info("Create a free api key at https://openrouter.ai/keys (no card required)")
     }
 
-    if (provider === "mistral") {
-      yield* Prompt.log.info("Create a free api key at https://console.mistral.ai (no card required)")
+    if (provider === "cloudflare") {
+      yield* Prompt.log.info("Create a free api key at https://dash.cloudflare.com/profile/api-tokens (no card required)")
     }
 
     if (provider === "ollama-cloud") {

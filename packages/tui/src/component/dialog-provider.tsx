@@ -388,13 +388,13 @@ function ApiMethod(props: ApiMethodProps) {
               </text>
             </box>
           ),
-          mistral: (
+          cloudflare: (
             <box gap={1}>
               <text fg={theme.textMuted}>
-                Mistral offers ~1B free tokens/month (no card required). Note: free tier opts into data training.
+                Cloudflare Workers AI offers 10,000 free neurons/day (no card). Does not train on your data.
               </text>
               <text fg={theme.text}>
-                Go to <span style={{ fg: theme.primary }}>https://console.mistral.ai</span> to get a key
+                Get a key at <span style={{ fg: theme.primary }}>https://dash.cloudflare.com/profile/api-tokens</span>
               </text>
             </box>
           ),
