@@ -19,7 +19,7 @@ wisp is opencode with opinions. Where opencode is generic by design, wisp assume
 ### Installation
 
 ```bash
-curl -fsSL https://xvoidsx.github.io/wisp/install.sh | bash
+curl -fsSL https://raw.githubusercontent.com/xvoidsx/wisp/dev/install.sh | bash
 ```
 
 Or if you're on navi, it's in naviApps — search "wisp."
