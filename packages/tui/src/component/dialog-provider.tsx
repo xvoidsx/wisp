@@ -422,6 +422,16 @@ function ApiMethod(props: ApiMethodProps) {
               </text>
             </box>
           ),
+          venice: (
+            <box gap={1}>
+              <text fg={theme.textMuted}>
+                Venice.ai offers private, uncensored models. API requires Pro ($18/mo).
+              </text>
+              <text fg={theme.text}>
+                Go to <span style={{ fg: theme.primary }}>https://venice.ai</span> to get a key
+              </text>
+            </box>
+          ),
         })[props.providerID] ?? undefined
       }
       onConfirm={async (value) => {
