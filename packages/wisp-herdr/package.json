@@ -1,0 +1,7 @@
+{
+  "name": "wisp-herdr",
+  "version": "1.0.0",
+  "description": "Report wisp lifecycle state to herdr",
+  "type": "module",
+  "main": "./dist/index.js"
+}
