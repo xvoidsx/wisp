@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <defs>
+    <linearGradient id="wispGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff10f0"/>
+      <stop offset="50%" stop-color="#ff10f0"/>
+      <stop offset="100%" stop-color="#39ff14"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="256" height="256" rx="48" fill="#000000"/>
+  <!-- stylized 'w' as flowing wisp trails -->
+  <g filter="url(#glow)" fill="none" stroke="url(#wispGlow)" stroke-width="10" stroke-linecap="round">
+    <path d="M48 88 C 64 88, 72 120, 80 168 C 84 188, 92 188, 96 168 C 104 120, 112 88, 128 88"/>
+    <path d="M128 88 C 144 88, 152 120, 160 168 C 164 188, 172 188, 176 168 C 184 120, 192 88, 208 88" opacity="0.7"/>
+  </g>
+  <!-- small spark at the end -->
+  <circle cx="208" cy="88" r="6" fill="#39ff14" filter="url(#glow)"/>
+</svg>
