@@ -1454,6 +1454,9 @@ const layer = Layer.effect(
         const cfg = yield* config.get()
         const modelsDev = yield* modelsDevSvc.get()
         const catalog = mapValues(modelsDev, fromModelsDevProvider)
+        // wisp: strip opencode's Zen provider — we're not leeching their service.
+        // Ollama (local + Cloud), Groq, OpenRouter, and Mistral are our free-tier story.
+        delete (catalog as Record<string, unknown>)["opencode"]
         const database = mapValues(catalog, toPublicInfo)
 
         const providers: Record<ProviderV2.ID, Info> = {} as Record<ProviderV2.ID, Info>

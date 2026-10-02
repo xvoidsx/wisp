@@ -463,8 +463,20 @@ export const ProvidersLoginCommand = effectCmd({
       )
     }
 
-    if (provider === "opencode") {
-      yield* Prompt.log.info("Create an api key at https://opencode.ai/auth")
+    if (provider === "groq") {
+      yield* Prompt.log.info("Create a free api key at https://console.groq.com/keys (no card required)")
+    }
+
+    if (provider === "openrouter") {
+      yield* Prompt.log.info("Create a free api key at https://openrouter.ai/keys (no card required)")
+    }
+
+    if (provider === "mistral") {
+      yield* Prompt.log.info("Create a free api key at https://console.mistral.ai (no card required)")
+    }
+
+    if (provider === "ollama-cloud") {
+      yield* Prompt.log.info("Create a free api key at https://ollama.com/settings/keys")
     }
 
     if (provider === "vercel") {
