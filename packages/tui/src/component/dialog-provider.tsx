@@ -398,6 +398,16 @@ function ApiMethod(props: ApiMethodProps) {
               </text>
             </box>
           ),
+          zai: (
+            <box gap={1}>
+              <text fg={theme.textMuted}>
+                Z.ai offers GLM Flash models free (no card). Amazing open-weights models, no training on your data.
+              </text>
+              <text fg={theme.text}>
+                Get a key at <span style={{ fg: theme.primary }}>https://z.ai/manage-apikey/apikey-list</span>
+              </text>
+            </box>
+          ),
           "ollama-cloud": (
             <box gap={1}>
               <text fg={theme.textMuted}>

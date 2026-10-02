@@ -475,6 +475,10 @@ export const ProvidersLoginCommand = effectCmd({
       yield* Prompt.log.info("Create a free api key at https://dash.cloudflare.com/profile/api-tokens (no card required)")
     }
 
+    if (provider === "zai") {
+      yield* Prompt.log.info("Create a free api key at https://z.ai/manage-apikey/apikey-list (no card required)")
+    }
+
     if (provider === "ollama-cloud") {
       yield* Prompt.log.info("Create a free api key at https://ollama.com/settings/keys")
     }
