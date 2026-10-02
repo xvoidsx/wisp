@@ -21,10 +21,6 @@ jobs:
             target: linux-x64
           - os: ubuntu-24.04-arm
             target: linux-arm64
-          - os: macos-15
-            target: darwin-arm64
-          - os: macos-15-intel
-            target: darwin-x64
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@f43a0e5ff2bd294095638e18286ca9a3d1956744 # v4.6.0
@@ -45,12 +41,7 @@ jobs:
 
       - name: Package
         run: |
-          # Find the built binary and package it
-          bin=$(find packages/opencode/dist -name "wisp-*" -type d | grep "${{ matrix.target }}" | head -1)
-          # Fallback: opencode names its output dirs opencode-<platform>
-          if [[ -z "$bin" ]]; then
-            bin=$(find packages/opencode/dist -name "opencode-*" -type d | grep "${{ matrix.target }}" | head -1)
-          fi
+          bin=$(find packages/opencode/dist -name "opencode-*" -type d | grep "${{ matrix.target }}" | head -1)
           if [[ -z "$bin" ]]; then
             echo "No build output found for ${{ matrix.target }}"
             ls packages/opencode/dist/
@@ -95,4 +86,3 @@ jobs:
           files: artifacts/wisp-*.tar.gz
           draft: false
           prerelease: false
-# test
