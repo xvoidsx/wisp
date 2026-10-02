@@ -21,7 +21,7 @@ import { useClipboard } from "../context/clipboard"
 const PROVIDER_PRIORITY: Record<string, number> = {
   ollama: 0,
   "ollama-cloud": 1,
-  cloudflare: 2,
+  "cloudflare-workers-ai": 2,
   openrouter: 3,
   zai: 4,
 }
@@ -64,7 +64,7 @@ export function providerOptions(list: { id: string; name: string }[]): ProviderO
         description: {
           ollama: "Local models — private, free, no key needed",
           "ollama-cloud": "Zero data retention",
-          cloudflare: "10k neurons/day free",
+          "cloudflare-workers-ai": "10k neurons/day free",
           openrouter: "Many models, free tier",
           zai: "GLM Flash free",
         }[provider.id],
@@ -392,7 +392,7 @@ function ApiMethod(props: ApiMethodProps) {
               </text>
             </box>
           ),
-          cloudflare: (
+          "cloudflare-workers-ai": (
             <box gap={1}>
               <text fg={theme.textMuted}>
                 Cloudflare Workers AI offers 10,000 free neurons/day (no card). Does not train on your data.
