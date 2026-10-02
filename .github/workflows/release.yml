@@ -1,4 +1,3 @@
-# release.yml
 name: release
 run-name: "wisp release ${{ inputs.version || 'auto' }}"
 
@@ -96,3 +95,4 @@ jobs:
           files: artifacts/wisp-*.tar.gz
           draft: false
           prerelease: false
+# test
