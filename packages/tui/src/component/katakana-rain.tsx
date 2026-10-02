@@ -1,100 +1,92 @@
 import { createSignal, onCleanup, onMount, For } from "solid-js"
 import { useTheme } from "../context/theme"
+import { useTerminalDimensions } from "@opentui/solid"
 
 // Katakana characters for the rain effect
-const KATAKANA = "アカサタナハマヤラワイキシチニヒミリヰウクスツヌフムルヲエケセテネヘメレヱオコソトノホモヨロヲ0123456789"
+const KATAKANA = "アカサタナハマヤラワイキシチニヒミリヰウクスツヌフムルヲエケセテネヘメレヱオコソトノホモヨロヲ"
 
 function randomKatakana() {
   return KATAKANA[Math.floor(Math.random() * KATAKANA.length)]
 }
 
 interface Drop {
-  id: number
   x: number
   y: number
   speed: number
   char: string
-  length: number
 }
 
-export function KatakanaRain(props: { width: number; height: number; density?: number }) {
+/**
+ * Subtle katakana drift for the home screen background.
+ * Very low density and dim colors — classy, not distracting.
+ */
+export function KatakanaRain() {
   const { theme } = useTheme()
+  const dimensions = useTerminalDimensions()
   const [drops, setDrops] = createSignal<Drop[]>([])
-  let nextId = 0
   let interval: ReturnType<typeof setInterval>
 
-  const density = () => props.density ?? 0.1
-
   onMount(() => {
-    // Initialize drops
+    const width = dimensions().width
+    const height = dimensions().height
+
+    // Low density: ~1 drop per 12 columns
+    const count = Math.max(6, Math.floor(width / 12))
     const initial: Drop[] = []
-    const count = Math.floor(props.width * density())
     for (let i = 0; i < count; i++) {
       initial.push({
-        id: nextId++,
-        x: Math.floor(Math.random() * props.width),
-        y: Math.floor(Math.random() * props.height),
-        speed: 0.5 + Math.random() * 1.5,
+        x: Math.floor(Math.random() * width),
+        y: Math.floor(Math.random() * height),
+        speed: 0.3 + Math.random() * 0.7,
         char: randomKatakana(),
-        length: 3 + Math.floor(Math.random() * 5),
       })
     }
     setDrops(initial)
 
-    // Animate
+    // Slow animation — 200ms tick for a gentle drift
     interval = setInterval(() => {
+      const h = dimensions().height
+      const w = dimensions().width
       setDrops((prev) =>
         prev.map((drop) => {
           let newY = drop.y + drop.speed
-          if (newY > props.height) {
-            // Reset to top with new random x
+          if (newY > h) {
             return {
-              ...drop,
-              x: Math.floor(Math.random() * props.width),
-              y: -drop.length,
+              x: Math.floor(Math.random() * w),
+              y: -1,
+              speed: 0.3 + Math.random() * 0.7,
               char: randomKatakana(),
             }
           }
-          // Occasionally change the character (flicker effect)
-          const newChar = Math.random() < 0.1 ? randomKatakana() : drop.char
+          // Occasionally change character for shimmer
+          const newChar = Math.random() < 0.05 ? randomKatakana() : drop.char
           return { ...drop, y: newY, char: newChar }
         })
       )
-    }, 100)
+    }, 200)
   })
 
   onCleanup(() => clearInterval(interval))
 
   return (
-    <box
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: props.width,
-        height: props.height,
-      }}
-    >
+    <box position="absolute" top={0} left={0} right={0} bottom={0} zIndex={0}>
       <For each={drops()}>
         {(drop) => (
-          <text
-            style={{
-              position: "absolute",
-              left: drop.x,
-              top: Math.floor(drop.y),
-              fg: theme.textMuted,
-              // Dim the further down it goes for a fade effect
-            }}
-          >
-            {drop.char}
-          </text>
+          <box position="absolute" left={drop.x} top={Math.floor(drop.y)}>
+            <text fg={theme.textMuted} dim>
+              {drop.char}
+            </text>
+          </box>
         )}
       </For>
     </box>
   )
 }
 
-// Simpler shimmer for loading states — a row of katakana that cycles
+/**
+ * Katakana shimmer for thinking/loading states.
+ * Cycles through katakana characters.
+ */
 export function KatakanaShimmer() {
   const { theme } = useTheme()
   const [offset, setOffset] = createSignal(0)
@@ -102,21 +94,17 @@ export function KatakanaShimmer() {
 
   const chars = () => {
     const result = []
-    for (let i = 0; i < 8; i++) {
-      result.push(KATAKANA[(offset() + i * 3) % KATAKANA.length])
+    for (let i = 0; i < 6; i++) {
+      result.push(KATAKANA[(offset() + i * 5) % KATAKANA.length])
     }
     return result.join(" ")
   }
 
   onMount(() => {
-    interval = setInterval(() => setOffset((o) => o + 1), 150)
+    interval = setInterval(() => setOffset((o) => o + 1), 200)
   })
 
   onCleanup(() => clearInterval(interval))
 
-  return (
-    <text fg={theme.primary}>
-      {chars()}
-    </text>
-  )
+  return <text fg={theme.primary}>{chars()}</text>
 }
