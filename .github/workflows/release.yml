@@ -41,7 +41,10 @@ jobs:
 
       - name: Package
         run: |
-          bin=$(find packages/opencode/dist -name "opencode-*" -type d | grep "${{ matrix.target }}" | head -1)
+          bin=$(find packages/opencode/dist -name "wisp-*" -type d | grep "${{ matrix.target }}" | head -1)
+          if [[ -z "$bin" ]]; then
+            bin=$(find packages/opencode/dist -name "opencode-*" -type d | grep "${{ matrix.target }}" | head -1)
+          fi
           if [[ -z "$bin" ]]; then
             echo "No build output found for ${{ matrix.target }}"
             ls packages/opencode/dist/
