@@ -368,25 +368,43 @@ function ApiMethod(props: ApiMethodProps) {
       placeholder="API key"
       description={() =>
         ({
-          opencode: (
+          groq: (
             <box gap={1}>
               <text fg={theme.textMuted}>
-                OpenCode Zen gives you access to all the best coding models at the cheapest prices with a single API
-                key.
+                Groq offers a free tier (no card required) with fast inference on open models.
               </text>
               <text fg={theme.text}>
-                Go to <span style={{ fg: theme.primary }}>https://opencode.ai/zen</span> to get a key
+                Go to <span style={{ fg: theme.primary }}>https://console.groq.com/keys</span> to get a key
               </text>
             </box>
           ),
-          "opencode-go": (
+          openrouter: (
             <box gap={1}>
               <text fg={theme.textMuted}>
-                OpenCode Go is a $10 per month subscription that provides reliable access to popular open coding models
-                with generous usage limits.
+                OpenRouter gives you access to many models (including free ones) through a single API key.
               </text>
               <text fg={theme.text}>
-                Go to <span style={{ fg: theme.primary }}>https://opencode.ai/go</span> and enable OpenCode Go
+                Go to <span style={{ fg: theme.primary }}>https://openrouter.ai/keys</span> to get a key
+              </text>
+            </box>
+          ),
+          mistral: (
+            <box gap={1}>
+              <text fg={theme.textMuted}>
+                Mistral offers ~1B free tokens/month (no card required). Note: free tier opts into data training.
+              </text>
+              <text fg={theme.text}>
+                Go to <span style={{ fg: theme.primary }}>https://console.mistral.ai</span> to get a key
+              </text>
+            </box>
+          ),
+          "ollama-cloud": (
+            <box gap={1}>
+              <text fg={theme.textMuted}>
+                Ollama Cloud offers starter credits with zero data retention — the most private cloud option.
+              </text>
+              <text fg={theme.text}>
+                Go to <span style={{ fg: theme.primary }}>https://ollama.com/settings/keys</span> to get a key
               </text>
             </box>
           ),
