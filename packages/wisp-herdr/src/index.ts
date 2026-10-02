@@ -1,4 +1,5 @@
-import { execSync } from "child_process"
+import { execFileSync } from "child_process"
+import type { Hooks, PluginInput } from "@opencode-ai/plugin"
 
 /**
  * wisp-herdr: report wisp lifecycle state to the herdr pane hosting
@@ -26,13 +27,15 @@ function report(state: "working" | "idle" | "blocked" | "unknown" | "release") {
 
   try {
     if (state === "release") {
-      execSync(
-        `${herdrBin} pane release-agent "${paneId}" --source "${SOURCE_ID}" --agent "${AGENT_LABEL}"`,
+      execFileSync(
+        herdrBin,
+        ["pane", "release-agent", paneId, "--source", SOURCE_ID, "--agent", AGENT_LABEL],
         { stdio: "ignore", timeout: 5000 }
       )
     } else {
-      execSync(
-        `${herdrBin} pane report-agent "${paneId}" --source "${SOURCE_ID}" --agent "${AGENT_LABEL}" --state "${state}"`,
+      execFileSync(
+        herdrBin,
+        ["pane", "report-agent", paneId, "--source", SOURCE_ID, "--agent", AGENT_LABEL, "--state", state],
         { stdio: "ignore", timeout: 5000 }
       )
     }
@@ -41,31 +44,40 @@ function report(state: "working" | "idle" | "blocked" | "unknown" | "release") {
   }
 }
 
-export const WispHerdrPlugin = {
-  event: async ({ event }: { event: { type: string } }) => {
-    // Map wisp session events to herdr states
-    switch (event.type) {
-      case "session.created":
-      case "session.idle":
-      case "session.updated":
-        report("idle")
-        break
-      case "session.status":
-        // status events indicate active work
-        report("working")
-        break
-      case "message.updated":
-      case "message.part.updated":
-        report("working")
-        break
-      case "session.error":
-        report("blocked")
-        break
-      case "session.deleted":
-        report("release")
-        break
-    }
-  },
+export async function WispHerdrPlugin(_input: PluginInput): Promise<Hooks> {
+  return {
+    event: async ({ event }) => {
+      // Map wisp session events to herdr states
+      switch (event.type) {
+        case "session.created":
+        case "session.idle":
+          report("idle")
+          break
+        case "session.status": {
+          // status events carry the session status — check if actually working
+          const status = (event as unknown as { properties?: { status?: string } }).properties?.status
+          if (status === "busy" || status === "working") {
+            report("working")
+          } else {
+            report("idle")
+          }
+          break
+        }
+        case "message.part.updated": {
+          // Only report working for assistant messages, not user input
+          const role = (event as unknown as { properties?: { part?: { role?: string } } }).properties?.part?.role
+          if (role === "assistant") {
+            report("working")
+          }
+          break
+        }
+        case "session.error":
+          report("blocked")
+          break
+        case "session.deleted":
+          report("release")
+          break
+      }
+    },
+  }
 }
-
-export default WispHerdrPlugin
