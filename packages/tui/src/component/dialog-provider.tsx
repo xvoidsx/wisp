@@ -16,14 +16,17 @@ import { useConnected } from "./use-connected"
 import { useBindings } from "../keymap"
 import { useClipboard } from "../context/clipboard"
 
+// wisp: first-class providers get top billing with ✦ trusted badges.
+// Everything else falls under "Bring your own key".
 const PROVIDER_PRIORITY: Record<string, number> = {
-  opencode: 0,
-  "opencode-go": 1,
-  openai: 2,
-  "github-copilot": 3,
-  anthropic: 4,
-  google: 5,
+  ollama: 0,
+  "ollama-cloud": 1,
+  cloudflare: 2,
+  openrouter: 3,
+  zai: 4,
 }
+
+const FIRST_CLASS_PROVIDERS = new Set(Object.keys(PROVIDER_PRIORITY))
 
 const CUSTOM_PROVIDER_OPTION_VALUE = "__opencode_custom_provider__"
 const CUSTOM_PROVIDER_ID = /^[a-z0-9][a-z0-9-_]*$/
@@ -55,16 +58,17 @@ export function providerOptions(list: { id: string; name: string }[]): ProviderO
       ),
       map((provider) => ({
         type: "provider" as const,
-        title: provider.name,
+        title: FIRST_CLASS_PROVIDERS.has(provider.id) ? `✦ ${provider.name}` : provider.name,
         value: provider.id,
         providerID: provider.id,
         description: {
-          opencode: "(Recommended)",
-          anthropic: "(API key)",
-          openai: "(ChatGPT Plus/Pro or API key)",
-          "opencode-go": "Low cost subscription for everyone",
+          ollama: "Local models — private, free, no key needed",
+          "ollama-cloud": "Zero data retention",
+          cloudflare: "10k neurons/day free",
+          openrouter: "Many models, free tier",
+          zai: "GLM Flash free",
         }[provider.id],
-        category: provider.id in PROVIDER_PRIORITY ? "Popular" : "Providers",
+        category: provider.id in PROVIDER_PRIORITY ? "Trusted" : "Bring your own key",
       })),
     ),
     {

@@ -47,7 +47,7 @@ export function Logo() {
   }
 
   return (
-    <box>
+    <box flexDirection="column" alignItems="center">
       <For each={logo.left}>
         {(line, index) => (
           <box flexDirection="row" gap={1}>
@@ -56,6 +56,11 @@ export function Logo() {
           </box>
         )}
       </For>
+      <box marginTop={1}>
+        <text fg={theme.textMuted} selectable={false}>
+          {"ウィスプ — your navi code agent"}
+        </text>
+      </box>
     </box>
   )
 }
