@@ -45,6 +45,10 @@ function report(state: "working" | "idle" | "blocked" | "unknown" | "release") {
 }
 
 export async function WispHerdrPlugin(_input: PluginInput): Promise<Hooks> {
+  // Report immediately on plugin load — this is the most reliable signal
+  // that wisp is running. Event-based updates below refine the state.
+  report("idle")
+
   return {
     event: async ({ event }) => {
       // Map wisp session events to herdr states
